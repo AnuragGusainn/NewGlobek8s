@@ -35,6 +35,6 @@ spec:
   ports:
     - port: 80  # The port the service will expose
       targetPort: 5000  # The port your Flask app is listening on
-      #nodePort: 30007  # Optional: manually specify the NodePort
+      nodePort: 44771  # Optional: manually specify the NodePort
   selector:
     app: flask-app
