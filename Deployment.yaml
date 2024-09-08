@@ -31,7 +31,7 @@ metadata:
   labels:
     app: flask-app
 spec:
-  type: NodePort  # or LoadBalancer if you need an external IP for the service
+  type: LoadBalancer  # or LoadBalancer if you need an external IP for the service
   ports:
     - port: 80  # The port the service will expose
       targetPort: 5000  # The port your Flask app is listening on
