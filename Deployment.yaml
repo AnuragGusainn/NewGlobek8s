@@ -1,38 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
+  name: flask-app-deployment
   labels:
     app: flask-app
-  name: flask-app
 spec:
-  replicas: 2
+  replicas: 2  # You can adjust the number of replicas as needed
   selector:
     matchLabels:
       app: flask-app
-  strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: flask-app
     spec:
       containers:
-      - image: anuraggg/flask-app:latest
-        name: flask-app
-        resources: {}
-status: {}
+      - name: flask-app-container
+        image: anuraggg/flask-app:latest  # Your Docker image
+        ports:
+        - containerPort: 8082
+        env:
+        - name: FLASK_APP
+          value: "app.py"
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: flask-app
+  name: flask-app-service
   labels:
     app: flask-app
 spec:
-  type: NodePort
+  type: NodePort  # or LoadBalancer if you need an external IP for the service
   ports:
-  - port: 80
-    targetPort: 8000
+    - port: 80  # The port the service will expose
+      targetPort: 8082  # The port your Flask app is listening on
+      nodePort: 30235  # Optional: manually specify the NodePort
   selector:
     app: flask-app
