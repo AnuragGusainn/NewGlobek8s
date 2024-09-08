@@ -18,7 +18,7 @@ spec:
       - name: flask-app-container
         image: anuraggg/flask-app:latest  # Your Docker image
         ports:
-        - containerPort: 8082
+        - containerPort: 8000
         env:
         - name: FLASK_APP
           value: "app.py"
@@ -34,7 +34,7 @@ spec:
   type: NodePort  # or LoadBalancer if you need an external IP for the service
   ports:
     - port: 80  # The port the service will expose
-      targetPort: 8082  # The port your Flask app is listening on
+      targetPort: 8000  # The port your Flask app is listening on
       nodePort: 30235  # Optional: manually specify the NodePort
   selector:
     app: flask-app
