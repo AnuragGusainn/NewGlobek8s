@@ -18,9 +18,9 @@ pipeline {
                             sh "git config user.name AnuragGusainn"
                             
                             // Modify deployment.yaml
-                            sh "cat deployment.yaml"
-                            sh "sed -i 's+anuraggg/flask-app.*+anuraggg/flask-app:${DOCKERTAG}+g' deployment.yaml"
-                            sh "cat deployment.yaml"
+                            sh "cat Deployment.yaml"
+                            sh "sed -i 's+anuraggg/flask-app.*+anuraggg/flask-app:${DOCKERTAG}+g' Deployment.yaml"
+                            sh "cat Deployment.yaml"
                             
                             // Add and commit changes
                             sh "git add ."
