@@ -5,7 +5,7 @@ metadata:
   labels:
     app: flask-app
 spec:
-  replicas: 2  # Adjust replicas as needed
+  replicas: 2  # Adjust as needed
   selector:
     matchLabels:
       app: flask-app
@@ -16,28 +16,30 @@ spec:
     spec:
       containers:
       - name: flask-app-container
-        image: anuraggg/flask-app:48
+        image: anuraggg/flask-app:latest  # Use 'latest' or appropriate tag
         ports:
         - containerPort: 8000  # Flask app port
-        - containerPort: 8001  # Prometheus metrics port (dynamic)
+        - containerPort: 8001  # Prometheus metrics port
         env:
         - name: FLASK_APP
           value: "app.py"
         - name: PROMETHEUS_PORT
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name  # Reference the pod name
+          value: "8001"  # Set this to the desired port or leave it to default
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: flask-app-service
+  labels:
+    app: flask-app
 spec:
-  type: NodePort
+  type: NodePort  # or LoadBalancer if you need an external IP for the service
   ports:
     - name: http
       port: 80
       targetPort: 8000
+      nodePort: 30235  # Optional: specify the NodePort
     - name: metrics
       port: 8001
       targetPort: 8001
