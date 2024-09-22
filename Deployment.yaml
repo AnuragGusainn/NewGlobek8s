@@ -34,10 +34,13 @@ metadata:
 spec:
   type: NodePort  # or LoadBalancer if you need an external IP for the service
   ports:
-    - port: 80  # The port the service will expose (HTTP)
+    - name: http  # Add a unique name for this port
+      port: 80  # The port the service will expose (HTTP)
       targetPort: 8000  # The port your Flask app is listening on
       nodePort: 30235  # Optional: manually specify the NodePort
-    - port: 8001  # Prometheus metrics port
+    - name: metrics  # Add a unique name for this port (for Prometheus)
+      port: 8001  # Prometheus metrics port
       targetPort: 8001  # The port the Prometheus metrics are exposed on
   selector:
     app: flask-app
+
