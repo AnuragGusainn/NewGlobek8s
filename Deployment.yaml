@@ -16,15 +16,17 @@ spec:
     spec:
       containers:
       - name: flask-app-container
-        image: anuraggg/flask-app:50
+        image: anuraggg/flask-app:48
         ports:
         - containerPort: 8000  # Flask app port
-        - containerPort: 8001  # Prometheus metrics port (default or dynamic)
+        - containerPort: 8001  # Prometheus metrics port (dynamic)
         env:
         - name: FLASK_APP
           value: "app.py"
         - name: PROMETHEUS_PORT
-          value: "{{PORT_VAR}}"  # Set dynamically for each replica
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name  # Reference the pod name
 ---
 apiVersion: v1
 kind: Service
@@ -37,4 +39,7 @@ spec:
       port: 80
       targetPort: 8000
     - name: metrics
-      port: 800
+      port: 8001
+      targetPort: 8001
+  selector:
+    app: flask-app
