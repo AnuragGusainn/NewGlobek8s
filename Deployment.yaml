@@ -5,7 +5,7 @@ metadata:
   labels:
     app: flask-app
 spec:
-  replicas: 2  # You can adjust the number of replicas as needed
+  replicas: 2  # Adjust replicas as needed
   selector:
     matchLabels:
       app: flask-app
@@ -16,42 +16,25 @@ spec:
     spec:
       containers:
       - name: flask-app-container
-        image: anuraggg/flask-app:49
+        image: anuraggg/flask-app:48
         ports:
         - containerPort: 8000  # Flask app port
-        - containerPort: 8001  # Prometheus metrics port
+        - containerPort: 8001  # Prometheus metrics port (default or dynamic)
         env:
         - name: FLASK_APP
           value: "app.py"
-        readinessProbe:  # Add readiness probe to ensure service availability
-          httpGet:
-            path: /
-            port: 8000
-          initialDelaySeconds: 10
-          periodSeconds: 5
-        livenessProbe:  # Add liveness probe to restart containers if necessary
-          httpGet:
-            path: /
-            port: 8000
-          initialDelaySeconds: 15
-          periodSeconds: 10
-
+        - name: PROMETHEUS_PORT
+          value: "{{PORT_VAR}}"  # Set dynamically for each replica
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: flask-app-service
-  labels:
-    app: flask-app
 spec:
-  type: NodePort  # or LoadBalancer if you need an external IP for the service
+  type: NodePort
   ports:
-    - name: http  # Add a unique name for this port
-      port: 80  # The port the service will expose (HTTP)
-      targetPort: 8000  # The port your Flask app is listening on
-      nodePort: 30235  # Optional: manually specify the NodePort
-    - name: metrics  # Add a unique name for this port (for Prometheus)
-      port: 8001  # Prometheus metrics port
-      targetPort: 8001  # The port the Prometheus metrics are exposed on
-  selector:
-    app: flask-app
+    - name: http
+      port: 80
+      targetPort: 8000
+    - name: metrics
+      port: 800
