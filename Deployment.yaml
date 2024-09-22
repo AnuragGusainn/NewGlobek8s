@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: flask-app-container
-        image: anuraggg/flask-app:latest  # Use 'latest' or appropriate tag
+        image: anuraggg/flask-app:51
         ports:
         - containerPort: 8000  # Flask app port
         - containerPort: 8001  # Prometheus metrics port
